@@ -13,7 +13,6 @@ import com.atakmap.android.menu.MapMenuReceiver;
 import com.atakmap.android.menu.MapMenuWidget;
 import com.atakmap.android.menu.MenuMapAdapter;
 import com.atakmap.android.menu.MenuResourceFactory;
-import com.atakmap.android.widgets.MapWidget;
 import com.atakmap.android.widgets.WidgetIcon;
 import com.atakmap.coremap.log.Log;
 
@@ -23,8 +22,9 @@ import gov.tak.api.widgets.IMapMenuButtonWidget;
 import gov.tak.api.widgets.IMapWidget;
 
 /**
- * Custom MapMenuFactory that attaches or enables a CCTV/Video button
- * in the radial menu of sensor markers on the map.
+ * Custom MapMenuFactory that adds a new, dedicated CCTV button
+ * to the radial menu of sensor markers on the map without overriding
+ * the existing built-in buttons.
  */
 public class SensorRadialMenuFactory implements MapMenuFactory {
 
@@ -58,7 +58,7 @@ public class SensorRadialMenuFactory implements MapMenuFactory {
         }
 
         // Check if item is a sensor marker
-        // In ATAK, standard sensor markers have CoT types starting with "b-m-p-s"
+        // Standard sensor markers have CoT types starting with "b-m-p-s"
         // (e.g., b-m-p-s-p-loc), or have metadata tags for sensor/camera.
         String type = item.getType();
         boolean isSensor = (type != null && (type.startsWith("b-m-p-s")
@@ -69,7 +69,7 @@ public class SensorRadialMenuFactory implements MapMenuFactory {
                 || item.hasMetaValue("videoUID");
 
         if (!isSensor) {
-            // Not a sensor marker, let other factories or ATAK default handle it
+            // Not a sensor marker, let standard ATAK factory create the menu
             return null;
         }
 
@@ -79,74 +79,43 @@ public class SensorRadialMenuFactory implements MapMenuFactory {
             return null;
         }
 
-        // 1. Look for existing video button in the sensor's radial menu (e.g. from menus/b-m-p-s-p-loc.xml)
-        MapMenuButtonWidget videoButton = findVideoButton(menuWidget);
-
-        if (videoButton != null) {
-            // Enable the built-in video button on the sensor wheel and wire our action
-            videoButton.setDisabled(false);
-            videoButton.setOnButtonClickHandler(new IMapMenuButtonWidget.OnButtonClickHandler() {
-                @Override
-                public boolean isSupported(Object o) {
-                    return true;
-                }
-
-                @Override
-                public void performAction(Object o) {
-                    onSensorRadialButtonClicked(item);
-                }
-            });
-        } else {
-            // 2. If the marker's menu does not have a video button, inject our custom button
-            addCustomRadialButton(menuWidget, item);
-        }
+        // Add a brand new, dedicated button to the radial menu
+        // We do NOT modify or override any existing buttons (the standard video button is untouched)
+        addNewRadialButton(menuWidget, item);
 
         return menuWidget;
     }
 
-    private MapMenuButtonWidget findVideoButton(MapMenuWidget menuWidget) {
-        for (MapWidget child : menuWidget.getChildWidgets()) {
-            if (child instanceof MapMenuButtonWidget) {
-                MapMenuButtonWidget buttonWidget = (MapMenuButtonWidget) child;
-                WidgetIcon icon = buttonWidget.getIcon();
-                if (icon != null) {
-                    MapDataRef iconRef = icon.getIconRef(0);
-                    if (iconRef != null && iconRef.toUri() != null) {
-                        String uri = iconRef.toUri();
-                        if (uri.contains("video.png") || uri.contains("camera.png")) {
-                            return buttonWidget;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private void addCustomRadialButton(MapMenuWidget menuWidget, final MapItem item) {
+    private void addNewRadialButton(MapMenuWidget menuWidget, final MapItem item) {
         MapView mapView = MapView.getMapView();
-        MapMenuButtonWidget buttonWidget = new MapMenuButtonWidget(mapView.getContext());
+        MapMenuButtonWidget newButton = new MapMenuButtonWidget(mapView.getContext());
 
+        // Use ATAK's built-in camera icon to give our CCTV button a clear, distinct visual
         WidgetIcon widgetIcon = new WidgetIcon.Builder()
                 .setImageRef(0, MapDataRef.parseUri("asset://icons/camera.png"))
                 .setAnchor(16, 16)
                 .setSize(32, 32)
                 .build();
-        buttonWidget.setIcon(widgetIcon);
+        newButton.setIcon(widgetIcon);
 
-        buttonWidget.setOrientation(buttonWidget.getOrientationAngle(), menuWidget.getInnerRadius());
+        // Inherit button background styling and calculate average layout weight from existing buttons
         if (menuWidget.getChildWidgetCount() > 0) {
             float buttonWeight = 0f;
             for (IMapWidget child : menuWidget.getChildren()) {
                 if (child instanceof MapMenuButtonWidget) {
-                    buttonWeight += ((MapMenuButtonWidget) child).getLayoutWeight();
+                    MapMenuButtonWidget sibling = (MapMenuButtonWidget) child;
+                    buttonWeight += sibling.getLayoutWeight();
+                    if (newButton.getWidgetBackground() == null && sibling.getWidgetBackground() != null) {
+                        newButton.setWidgetBackground(sibling.getWidgetBackground());
+                    }
                 }
             }
             buttonWeight /= menuWidget.getChildWidgetCount();
-            buttonWidget.setLayoutWeight(buttonWeight);
+            newButton.setLayoutWeight(buttonWeight);
         }
 
-        buttonWidget.setOnButtonClickHandler(new IMapMenuButtonWidget.OnButtonClickHandler() {
+        // Handle clicks on our new radial menu button
+        newButton.setOnButtonClickHandler(new IMapMenuButtonWidget.OnButtonClickHandler() {
             @Override
             public boolean isSupported(Object o) {
                 return true;
@@ -158,7 +127,8 @@ public class SensorRadialMenuFactory implements MapMenuFactory {
             }
         });
 
-        menuWidget.addWidget(buttonWidget);
+        // Add our new button directly into the radial menu wheel
+        menuWidget.addWidget(newButton);
     }
 
     private void onSensorRadialButtonClicked(final MapItem item) {
