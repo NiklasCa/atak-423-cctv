@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fadeScrollbars="false"
+    android:background="#181818"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingBottom="6dp" />
+
+        <!-- Sensor Info Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#242424"
+            android:padding="10dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/sensor_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sensor_title_default"
+                android:textColor="#00e5ff"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sensor_hint"
+                android:textColor="#aaaaaa"
+                android:textSize="12sp"
+                android:paddingTop="2dp"
+                android:paddingBottom="6dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#3a3a3a"
+                android:layout_marginBottom="6dp" />
+
+            <!-- Sensor Callsign -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="2dp">
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sensor_name_label"
+                    android:textColor="#888888"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/sensor_callsign_value"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Sensor UID -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="2dp">
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sensor_uid_label"
+                    android:textColor="#888888"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/sensor_uid_value"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Coordinates -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="2dp">
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sensor_coords_label"
+                    android:textColor="#888888"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/sensor_coords_value"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Status -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="2dp">
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sensor_status_label"
+                    android:textColor="#888888"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/sensor_status_value"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sensor_status_ready"
+                    android:textColor="#4caf50"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Video Placeholder Container -->
+        <FrameLayout
+            android:id="@+id/video_feed_container"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="#0a0a0a"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/video_feed_placeholder_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="[ Video Stream / CCTV Display Area ]"
+                android:textColor="#555555"
+                android:textSize="13sp" />
+        </FrameLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_connect_stream"
+                style="@style/darkButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_connect_feed"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/btn_snapshot"
+                style="@style/darkButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_snapshot"
+                android:layout_marginStart="4dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

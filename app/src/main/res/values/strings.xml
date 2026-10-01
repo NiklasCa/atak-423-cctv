@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">CCTV</string>
+    <!-- description -->
+    <string name="app_desc">ATAK CCTV and Sensor Video Plugin</string>
+
+    <string name="sensor_title_default">No Sensor Selected</string>
+    <string name="sensor_hint">Tap a sensor marker on the map and tap CCTV/Video to view its stream.</string>
+    <string name="sensor_name_label">Callsign / Name:</string>
+    <string name="sensor_uid_label">UID:</string>
+    <string name="sensor_coords_label">Coordinates:</string>
+    <string name="sensor_status_label">Status:</string>
+    <string name="sensor_status_ready">Standby</string>
+
+    <string name="btn_connect_feed">Connect Stream</string>
+    <string name="btn_snapshot">Take Snapshot</string>
+    <string name="btn_settings">Settings</string>
+
+
+
+
+</resources>
