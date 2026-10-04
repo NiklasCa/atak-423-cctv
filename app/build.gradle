@@ -250,7 +250,7 @@ android {
 }
 
 afterEvaluate {
-    project.file('proguard-gradle-repackage.txt').text = "-repackageclasses atakplugin.${rootProject.getName()}"
+    project.file('proguard-gradle-repackage.txt').text = "-repackageclasses atakplugin.${rootProject.getName().replaceAll('[^a-zA-Z0-9_]', '_')}"
 
     try { 
         tasks.named("compile" + getCommandFlavor() + "ReleaseKotlin") {
@@ -286,6 +286,7 @@ def getCommandFlavor() {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
+    testImplementation 'junit:junit:4.13.2'
 }
 
 configurations.all {

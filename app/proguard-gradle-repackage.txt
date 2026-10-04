@@ -1,1 +1,1 @@
--repackageclasses atakplugin.atak-423-cctv
+-repackageclasses atakplugin.atak_423_cctv

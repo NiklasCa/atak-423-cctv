@@ -21,7 +21,286 @@
             android:textStyle="bold"
             android:paddingBottom="6dp" />
 
-        <!-- Sensor Info Container -->
+        <!-- MediaMTX Server Settings Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#242424"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="MediaMTX Server"
+                    android:textColor="#ffb300"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/mediamtx_status_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UNCONFIGURED"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#aaaaaa"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:background="#33aaaaaa" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/mediamtx_status_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Specify server IP and ports to fetch available streams."
+                android:textColor="#888888"
+                android:textSize="11sp"
+                android:paddingTop="2dp"
+                android:paddingBottom="6dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#3a3a3a"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Server Host / IP -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Server Host / IP:"
+                android:textColor="#aaaaaa"
+                android:textSize="12sp"
+                android:paddingBottom="2dp" />
+
+            <EditText
+                android:id="@+id/mediamtx_host_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#333333"
+                android:textColor="#ffffff"
+                android:textColorHint="#666666"
+                android:hint="e.g. 192.168.1.100"
+                android:textSize="13sp"
+                android:padding="6dp"
+                android:singleLine="true"
+                android:inputType="textUri|textNoSuggestions"
+                android:layout_marginBottom="6dp" />
+
+            <!-- Ports: API Port and RTSP Port -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="6dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="4dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="API Port (v3):"
+                        android:textColor="#aaaaaa"
+                        android:textSize="12sp"
+                        android:paddingBottom="2dp" />
+
+                    <EditText
+                        android:id="@+id/mediamtx_api_port_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#333333"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#666666"
+                        android:hint="9997"
+                        android:textSize="13sp"
+                        android:padding="6dp"
+                        android:singleLine="true"
+                        android:inputType="number" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="4dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="RTSP Port:"
+                        android:textColor="#aaaaaa"
+                        android:textSize="12sp"
+                        android:paddingBottom="2dp" />
+
+                    <EditText
+                        android:id="@+id/mediamtx_rtsp_port_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#333333"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#666666"
+                        android:hint="8554"
+                        android:textSize="13sp"
+                        android:padding="6dp"
+                        android:singleLine="true"
+                        android:inputType="number" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Authentication: Username and Password -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="6dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="4dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Username (opt):"
+                        android:textColor="#aaaaaa"
+                        android:textSize="12sp"
+                        android:paddingBottom="2dp" />
+
+                    <EditText
+                        android:id="@+id/mediamtx_user_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#333333"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#666666"
+                        android:hint="Optional"
+                        android:textSize="13sp"
+                        android:padding="6dp"
+                        android:singleLine="true"
+                        android:inputType="textNoSuggestions" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="4dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Password (opt):"
+                        android:textColor="#aaaaaa"
+                        android:textSize="12sp"
+                        android:paddingBottom="2dp" />
+
+                    <EditText
+                        android:id="@+id/mediamtx_pass_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#333333"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#666666"
+                        android:hint="Optional"
+                        android:textSize="13sp"
+                        android:padding="6dp"
+                        android:singleLine="true"
+                        android:inputType="textPassword" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Poll Interval -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Background Poll Interval (sec):"
+                    android:textColor="#aaaaaa"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/mediamtx_poll_interval_edit"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="#333333"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#666666"
+                    android:text="10"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:padding="6dp"
+                    android:singleLine="true"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <!-- Buttons: Save and Refresh -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_save_mediamtx"
+                    style="@style/darkButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Save &amp; Connect"
+                    android:layout_marginEnd="4dp" />
+
+                <Button
+                    android:id="@+id/btn_refresh_mediamtx"
+                    style="@style/darkButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Refresh Streams"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <!-- Discovered Streams Summary -->
+            <TextView
+                android:id="@+id/mediamtx_streams_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No streams discovered yet."
+                android:textColor="#00e5ff"
+                android:textSize="12sp"
+                android:paddingTop="8dp" />
+
+        </LinearLayout>
+
+        <!-- Selected Sensor Info Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -121,6 +400,28 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
+            <!-- Configured Stream URL -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="2dp">
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Stream URL:"
+                    android:textColor="#888888"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/sensor_stream_url_value"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="None configured"
+                    android:textColor="#ffb300"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
             <!-- Status -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -144,13 +445,48 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- Sensor Stream Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="8dp">
+
+                <Button
+                    android:id="@+id/btn_assign_sensor_stream"
+                    style="@style/darkButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Stream"
+                    android:layout_marginEnd="3dp" />
+
+                <Button
+                    android:id="@+id/btn_connect_stream"
+                    style="@style/darkButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Play Video"
+                    android:layout_marginHorizontal="3dp" />
+
+                <Button
+                    android:id="@+id/btn_clear_sensor_stream"
+                    style="@style/darkButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Clear"
+                    android:layout_marginStart="3dp" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <!-- Video Placeholder Container -->
         <FrameLayout
             android:id="@+id/video_feed_container"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="160dp"
             android:background="#0a0a0a"
             android:layout_marginBottom="10dp">
 
@@ -164,31 +500,6 @@
                 android:textColor="#555555"
                 android:textSize="13sp" />
         </FrameLayout>
-
-        <!-- Action Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_connect_stream"
-                style="@style/darkButton"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_connect_feed"
-                android:layout_marginEnd="4dp" />
-
-            <Button
-                android:id="@+id/btn_snapshot"
-                style="@style/darkButton"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_snapshot"
-                android:layout_marginStart="4dp" />
-        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

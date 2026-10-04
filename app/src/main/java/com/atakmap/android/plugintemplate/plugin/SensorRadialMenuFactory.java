@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import gov.tak.api.widgets.IMapMenuButtonWidget;
 import gov.tak.api.widgets.IMapWidget;
+import gov.tak.api.widgets.IWidgetBackground;
 
 /**
  * Custom MapMenuFactory that adds a new, dedicated CCTV button
@@ -90,29 +91,76 @@ public class SensorRadialMenuFactory implements MapMenuFactory {
         MapView mapView = MapView.getMapView();
         MapMenuButtonWidget newButton = new MapMenuButtonWidget(mapView.getContext());
 
+        // Default dimensions matching ATAK's sensor radial menu specification
+        float radius = menuWidget.getInnerRadius() > 0 ? menuWidget.getInnerRadius() : 65f;
+        float width = menuWidget.getButtonWidth() > 0 ? menuWidget.getButtonWidth() : 90f;
+        float span = menuWidget.getButtonSpan() > 0 ? menuWidget.getButtonSpan() : 45f;
+        float weight = span;
+        int iconWidth = 32;
+        int iconHeight = 32;
+        int anchorX = 16;
+        int anchorY = 16;
+        IWidgetBackground bg = null;
+
+        MapMenuButtonWidget sampleSibling = null;
+        int siblingCount = 0;
+        float totalWeight = 0f;
+
+        // Inspect existing buttons in the radial menu to precisely match radius, width, weight, and background
+        for (IMapWidget child : menuWidget.getChildren()) {
+            if (child instanceof MapMenuButtonWidget) {
+                MapMenuButtonWidget sibling = (MapMenuButtonWidget) child;
+                if (sampleSibling == null) {
+                    sampleSibling = sibling;
+                }
+                totalWeight += sibling.getLayoutWeight();
+                siblingCount++;
+            }
+        }
+
+        if (sampleSibling != null) {
+            if (sampleSibling.getOrientationRadius() > 0) {
+                radius = sampleSibling.getOrientationRadius();
+            }
+            if (sampleSibling.getButtonWidth() > 0) {
+                width = sampleSibling.getButtonWidth();
+            }
+            if (sampleSibling.getButtonSpan() > 0) {
+                span = sampleSibling.getButtonSpan();
+            }
+            if (siblingCount > 0 && totalWeight > 0) {
+                weight = totalWeight / siblingCount;
+            } else if (sampleSibling.getLayoutWeight() > 0) {
+                weight = sampleSibling.getLayoutWeight();
+            }
+            bg = sampleSibling.getWidgetBackground();
+
+            if (sampleSibling.getIcon() != null) {
+                WidgetIcon siblingIcon = sampleSibling.getIcon();
+                if (siblingIcon.getIconWidth() > 0 && siblingIcon.getIconHeight() > 0) {
+                    iconWidth = siblingIcon.getIconWidth();
+                    iconHeight = siblingIcon.getIconHeight();
+                    anchorX = siblingIcon.getAnchorX();
+                    anchorY = siblingIcon.getAnchorY();
+                }
+            }
+        }
+
         // Use ATAK's built-in camera icon to give our CCTV button a clear, distinct visual
         WidgetIcon widgetIcon = new WidgetIcon.Builder()
                 .setImageRef(0, MapDataRef.parseUri("asset://icons/camera.png"))
-                .setAnchor(16, 16)
-                .setSize(32, 32)
+                .setAnchor(anchorX, anchorY)
+                .setSize(iconWidth, iconHeight)
                 .build();
         newButton.setIcon(widgetIcon);
 
-        // Inherit button background styling and calculate average layout weight from existing buttons
-        if (menuWidget.getChildWidgetCount() > 0) {
-            float buttonWeight = 0f;
-            for (IMapWidget child : menuWidget.getChildren()) {
-                if (child instanceof MapMenuButtonWidget) {
-                    MapMenuButtonWidget sibling = (MapMenuButtonWidget) child;
-                    buttonWeight += sibling.getLayoutWeight();
-                    if (newButton.getWidgetBackground() == null && sibling.getWidgetBackground() != null) {
-                        newButton.setWidgetBackground(sibling.getWidgetBackground());
-                    }
-                }
-            }
-            buttonWeight /= menuWidget.getChildWidgetCount();
-            newButton.setLayoutWeight(buttonWeight);
+        // Inherit styling and geometry so the button's radius, width, and weight seamlessly match the circle
+        if (bg != null) {
+            newButton.setWidgetBackground(bg);
         }
+        newButton.setOrientation(0f, radius);
+        newButton.setButtonSize(span, width);
+        newButton.setLayoutWeight(weight);
 
         // Handle clicks on our new radial menu button
         newButton.setOnButtonClickHandler(new IMapMenuButtonWidget.OnButtonClickHandler() {
@@ -141,17 +189,9 @@ public class SensorRadialMenuFactory implements MapMenuFactory {
                     menuReceiver.hideMenu();
                 }
 
-                String callsign = item.getMetaString("callsign", item.getTitle());
-                if (callsign == null || callsign.isEmpty()) {
-                    callsign = item.getUID();
-                }
-
-                Toast.makeText(MapView.getMapView().getContext(),
-                        "Opening CCTV for: " + callsign,
-                        Toast.LENGTH_SHORT).show();
-
-                // Open the Drop-Down Pane and update it with this sensor's details
-                plugin.showPaneForSensor(item);
+                // Present all available MediaMTX streams for selection
+                com.atakmap.android.plugintemplate.plugin.mediamtx.StreamSelectDialog.show(
+                        MapView.getMapView().getContext(), item, plugin);
             }
         });
     }
